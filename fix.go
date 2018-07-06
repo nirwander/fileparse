@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"io/ioutil"
 	"time"
@@ -12,7 +11,7 @@ func main() {
 	fileBytes1, _ := ioutil.ReadFile(`D:\ry000067444`)
 	fileBytes2, _ := ioutil.ReadFile(`D:\ry000067445`)
 
-	var bb bytes.Buffer
+	//var bb bytes.Buffer
 
 	/*
 
@@ -28,7 +27,7 @@ func main() {
 
 	*/
 
-	n, _ := bb.Write(fileBytes1[:1483])
+	/*n, _ := bb.Write(fileBytes1[:1483])
 	fmt.Printf("%d bytes buffered\n", n)
 
 	n, _ = bb.Write(fileBytes2[1813:14088])
@@ -41,7 +40,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
+	*/
+	fmt.Printf("%s\n\n", fileBytes1[:1815])
+	fmt.Printf("%s\n", fileBytes2[:1815])
 	//fmt.Printf("%x/n", bb.Bytes())
 	fmt.Printf("\nDone in %s", time.Since(start))
 }
