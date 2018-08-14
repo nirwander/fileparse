@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+// Структура для хранения MAP statement
 type repTable struct {
 	srcOwner  []byte
 	srcName   []byte
@@ -27,6 +28,9 @@ type config struct {
 // Config - configuration parameters
 var Config config
 
+// Aliases - пары идентификаторов подключения к базе из credentialstore
+var Aliases map[string]string
+
 func main() {
 	//fmt.Println("Hello World!")
 	start := time.Now()
@@ -34,7 +38,30 @@ func main() {
 	//processReplicatReport(`C:\Users\wander\go\xfecr.txt`)
 	getConfig()
 
+	getCredStoreInfo()
+
 	fmt.Printf("\n%s time spent", time.Since(start))
+}
+
+// Получаем данные credentialstore для вставки в нужную базу
+func getCredStoreInfo() {
+	fileBytes, _ := ioutil.ReadFile(`C:\Users\wander\go\cred.txt`)
+	lines := bytes.Split(fileBytes, []byte("\n"))
+
+	//Собираем пары alias-userid
+	Aliases = make(map[string]string)
+	var currAlias string
+	for _, line := range lines {
+		if bytes.Contains(line, []byte("Alias:")) {
+			currAlias = string(bytes.TrimLeft(bytes.TrimSpace(line), string("Alias: ")))
+			continue
+		}
+		if currAlias != "" {
+			Aliases[currAlias] = string(bytes.TrimLeft(bytes.TrimSpace(line), string("Userid: ")))
+			currAlias = ""
+		}
+	}
+	//fmt.Println(Aliases)
 }
 
 func processReplicatReport(fName string) map[string]repTable {
