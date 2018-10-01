@@ -43,27 +43,6 @@ func main() {
 	fmt.Printf("\n%s time spent", time.Since(start))
 }
 
-// Получаем данные credentialstore для вставки в нужную базу
-func getCredStoreInfo() {
-	fileBytes, _ := ioutil.ReadFile(`C:\Users\wander\go\cred.txt`)
-	lines := bytes.Split(fileBytes, []byte("\n"))
-
-	//Собираем пары alias-userid
-	Aliases = make(map[string]string)
-	var currAlias string
-	for _, line := range lines {
-		if bytes.Contains(line, []byte("Alias:")) {
-			currAlias = string(bytes.TrimLeft(bytes.TrimSpace(line), string("Alias: ")))
-			continue
-		}
-		if currAlias != "" {
-			Aliases[currAlias] = string(bytes.TrimLeft(bytes.TrimSpace(line), string("Userid: ")))
-			currAlias = ""
-		}
-	}
-	//fmt.Println(Aliases)
-}
-
 func processReplicatReport(fName string) map[string]repTable {
 	fileBytes, _ := ioutil.ReadFile(fName)
 
@@ -117,4 +96,25 @@ func getConfig() {
 
 	fmt.Println(Config)
 
+}
+
+// Получаем данные credentialstore для вставки в нужную базу
+func getCredStoreInfo() {
+	fileBytes, _ := ioutil.ReadFile(`C:\Users\wander\go\cred.txt`)
+	lines := bytes.Split(fileBytes, []byte("\n"))
+
+	//Собираем пары alias-userid
+	Aliases = make(map[string]string)
+	var currAlias string
+	for _, line := range lines {
+		if bytes.Contains(line, []byte("Alias:")) {
+			currAlias = string(bytes.TrimLeft(bytes.TrimSpace(line), string("Alias: ")))
+			continue
+		}
+		if currAlias != "" {
+			Aliases[currAlias] = string(bytes.TrimLeft(bytes.TrimSpace(line), string("Userid: ")))
+			currAlias = ""
+		}
+	}
+	//fmt.Println(Aliases)
 }
